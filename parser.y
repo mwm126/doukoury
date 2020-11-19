@@ -99,6 +99,7 @@ reductions:
 
 expression:
 	expression ANDOP relation {$$ = $1 && $3;} |
+	expression OROP relation {$$ = $1 || $3;} |
 	relation ;
 
 relation:
