@@ -4,7 +4,7 @@ compile: scanner.o parser.o listing.o values.o
 scanner.o: scanner.c values.h listing.h tokens.h
 	g++ -c scanner.c
 
-scanner.c: scanner.l	
+scanner.c: scanner.l
 	flex scanner.l
 	mv lex.yy.c scanner.c
 

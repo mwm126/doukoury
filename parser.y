@@ -17,26 +17,40 @@ using namespace std;
 int yylex();
 void yyerror(const char* message);
 
-Symbols<int> symbols;
+Symbols<double> symbols;
 
-int result;
+double result;
 
 %}
 
-%error-verbose
+%define parse.error verbose
 
 %union
 {
 	CharPtr iden;
 	Operators oper;
-	int value;
+	double value;
 }
 
 %token <iden> IDENTIFIER
-%token <value> INT_LITERAL
+%token <value> INT_LITERAL BOOL_LITERAL REAL_LITERAL
 
-%token <oper> ADDOP MULOP RELOP
-%token ANDOP
+%token <oper> ADDOP MULOP RELOP ANDOP
+
+%token ARROW
+%token REMOP
+%token EXPOP
+%token CASE
+%token ELSE
+%token ENDCASE
+%token ENDIF
+%token IF
+%token OTHERS
+%token REAL
+%token THEN
+%token WHEN
+%token OROP
+%token NOTOP
 
 %token BEGIN_ BOOLEAN END ENDREDUCE FUNCTION INTEGER IS REDUCE RETURNS
 
@@ -61,6 +75,7 @@ variable:
 
 type:
 	INTEGER |
+	REAL |
 	BOOLEAN ;
 
 body:
@@ -100,7 +115,9 @@ factor:
 
 primary:
 	'(' expression ')' {$$ = $2;} |
-	INT_LITERAL |
+	INT_LITERAL {$$ = $1;} |
+	REAL_LITERAL {$$ = $1;} |
+	BOOL_LITERAL {$$ = $1;} |
 	IDENTIFIER {if (!symbols.find($1, $$)) appendError(UNDECLARED, $1);} ;
 
 %%
