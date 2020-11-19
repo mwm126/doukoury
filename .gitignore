@@ -1,1 +1,8 @@
 .scanner.l.swp
+*.o
+compile
+parser.c
+parser.output
+scanner.c
+tokens.h
+.vscode/settings.json
