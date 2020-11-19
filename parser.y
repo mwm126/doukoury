@@ -35,10 +35,10 @@ double result;
 %token <iden> IDENTIFIER
 %token <value> INT_LITERAL BOOL_LITERAL REAL_LITERAL
 
-%token <oper> ADDOP MULOP RELOP ANDOP
+%token <oper> ADDOP MULOP RELOP ANDOP 
 
 %token ARROW
-%token REMOP
+
 %token EXPOP
 %token CASE
 %token ELSE

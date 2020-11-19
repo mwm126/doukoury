@@ -8,6 +8,7 @@ enum Operators
 {
     LESS,
     ADD,
+    SUBTRACT,
     MULTIPLY,
     DIVIDE,
     EXPONENT,

@@ -42,12 +42,12 @@ bool_literal	"true"|"false"
 ">="		{ ECHO; return(RELOP); }
 "<="		{ ECHO; return(RELOP); }
 "+"		{ ECHO; yylval.oper = ADD; return(ADDOP); }
-"-"		{ ECHO; return(ADDOP); }
+"-"		{ ECHO; yylval.oper = SUBTRACT; return(ADDOP); }
 "*"		{ ECHO; yylval.oper = MULTIPLY; return(MULOP); }
 "/"		{ ECHO; yylval.oper = DIVIDE; return(MULOP); }
 "=>"		{ ECHO; return(ARROW); }
-rem		{ ECHO; return(REMOP); }
-"**"		{ ECHO; return(EXPOP); }
+rem		{ ECHO; yylval.oper = REMAINDER; return(MULOP); }
+"**"		{ ECHO; yylval.oper = EXPONENT; return(EXPOP); }
 begin		{ ECHO; return(BEGIN_); }
 boolean		{ ECHO; return(BOOLEAN); }
 end		{ ECHO; return(END); }

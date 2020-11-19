@@ -42,6 +42,15 @@ double evaluateArithmetic(double left, Operators operator_, double right)
 	case MULTIPLY:
 		result = left * right;
 		break;
+	case DIVIDE:
+		result = left / right;
+		break;
+	case REMAINDER:
+		result = (int)left % (int)right;
+		break;
+	case EXPONENT:
+		result = pow(left, right);
+		break;
 	}
 	return result;
 }
