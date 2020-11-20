@@ -22,7 +22,7 @@ Symbols<double> symbols;
 deque<double> params;
 
 double result;
-int current_expr;
+vector<int> case_expression;
 
 %}
 
@@ -99,19 +99,19 @@ statement_:
 	
 statement:
 	expression |
-	IF expression THEN expression ';' ELSE expression ';' ENDIF { $$ = $2?$4:$7; } |
-	CASE case_expr IS cases OTHERS ARROW statement_ ENDCASE { $$ = ($4!=NAN)?$4:$7;} |
+	IF expression THEN statement ';' ELSE statement ';' ENDIF { $$ = $2?$4:$7; } |
+	CASE case_expr IS cases OTHERS ARROW statement_ ENDCASE { $$ = ($4!=NAN)?$4:$7; case_expression.pop_back();} |
 	REDUCE operator reductions ENDREDUCE {$$ = $3;} ;
 
 case_expr:
-	 expression { current_expr = $1; } ;
+	 expression { case_expression.push_back($1); } ;
 
 cases:
 	cases case { $$ = ($1!=NAN)?$1:$2;} |
 	%empty { $$ = NAN;};
 
 case:
-	WHEN INT_LITERAL ARROW statement_ {$$ = ($2==current_expr)?$4:NAN;} ;
+	WHEN INT_LITERAL ARROW statement_ {$$ = ($2==case_expression.back())?$4:NAN;} ;
 
 operator:
 	ADDOP |
