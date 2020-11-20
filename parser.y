@@ -22,6 +22,7 @@ Symbols<double> symbols;
 deque<double> params;
 
 double result;
+int current_expr;
 
 %}
 
@@ -52,11 +53,12 @@ double result;
 %token WHEN
 %token OROP
 %token NOTOP
+%token NAN
 
 %token BEGIN_ BOOLEAN END ENDREDUCE FUNCTION INTEGER IS REDUCE RETURNS
 
 %type <value> body statement_ statement reductions expression relation term
-	factor power primary
+	factor power primary case cases
 %type <oper> operator
 
 %%
@@ -69,7 +71,8 @@ function_header:
 
 parameters:
 	  parameter |
-	  parameter ',' parameters;
+	  parameter ',' parameters |
+	  %empty ;
 
 parameter:
 	IDENTIFIER ':' type {symbols.insert($1, params.front()); params.pop_front(); } ;
@@ -80,7 +83,7 @@ optional_variable:
 
 variable:
 	IDENTIFIER ':' type IS statement_ {symbols.insert($1, $5);} |
-        ;
+	%empty ;
 
 type:
 	INTEGER |
@@ -97,7 +100,18 @@ statement_:
 statement:
 	expression |
 	IF expression THEN expression ';' ELSE expression ';' ENDIF { $$ = $2?$4:$7; } |
+	CASE case_expr IS cases OTHERS ARROW statement_ ENDCASE { $$ = ($4!=NAN)?$4:$7;} |
 	REDUCE operator reductions ENDREDUCE {$$ = $3;} ;
+
+case_expr:
+	 expression { current_expr = $1; } ;
+
+cases:
+	cases case { $$ = ($1!=NAN)?$1:$2;} |
+	%empty { $$ = NAN;};
+
+case:
+	WHEN INT_LITERAL ARROW statement_ {$$ = ($2==current_expr)?$4:NAN;} ;
 
 operator:
 	ADDOP |
@@ -105,7 +119,7 @@ operator:
 
 reductions:
 	reductions statement_ {$$ = evaluateReduction($<oper>0, $1, $2);} |
-	{$$ = $<oper>0 == ADD ? 0 : 1;} ;
+	%empty {$$ = $<oper>0 == ADD ? 0 : 1;} ;
 
 expression:
 	NOTOP expression {$$ = ! $2;} |
