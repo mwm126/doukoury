@@ -36,11 +36,11 @@ bool_literal	"true"|"false"
 {bool_literal}	{ ECHO; yylval.value = (bool)strcmp(yytext, "false"); return(BOOL_LITERAL); }
 {real_literal}	{ ECHO; yylval.value = atof(yytext); return(REAL_LITERAL); }
 "<"		{ ECHO; yylval.oper = LESS; return(RELOP); }
-"="		{ ECHO; return(RELOP); }
-"/="		{ ECHO; return(RELOP); }
-">"		{ ECHO; return(RELOP); }
-">="		{ ECHO; return(RELOP); }
-"<="		{ ECHO; return(RELOP); }
+"="		{ ECHO; yylval.oper = EQUAL; return(RELOP); }
+"/="		{ ECHO; yylval.oper = NOTEQUAL; return(RELOP); }
+">"		{ ECHO; yylval.oper = GREATER; return(RELOP); }
+">="		{ ECHO; yylval.oper = EGREATER; return(RELOP); }
+"<="		{ ECHO; yylval.oper = ELESS; return(RELOP); }
 "+"		{ ECHO; yylval.oper = ADD; return(ADDOP); }
 "-"		{ ECHO; yylval.oper = SUBTRACT; return(ADDOP); }
 "*"		{ ECHO; yylval.oper = MULTIPLY; return(MULOP); }
@@ -69,7 +69,8 @@ then		{ ECHO; return(THEN); }
 when		{ ECHO; return(WHEN); }
 or		{ ECHO; return(OROP); }
 not		{ ECHO; return(NOTOP); }
-{id}		{ ECHO; return(IDENTIFIER);}
+{id}            { ECHO; yylval.iden = (CharPtr)malloc(yyleng + 1);
+                        strcpy(yylval.iden, yytext); return(IDENTIFIER);}
 {int}		{ ECHO; yylval.value = atoi(yytext); return(INT_LITERAL); }
 {punc}		{ ECHO; return(yytext[0]); }
 .		{ ECHO; appendError(LEXICAL, yytext); }

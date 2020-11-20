@@ -27,6 +27,21 @@ double evaluateRelational(double left, Operators operator_, double right)
 	case LESS:
 		result = left < right;
 		break;
+	case GREATER:
+		result = left > right;
+		break;
+	case ELESS:
+		result = left <= right;
+		break;
+	case EGREATER:
+		result = left >= right;
+		break;
+	case EQUAL:
+		result = left == right;
+		break;
+	case NOTEQUAL:
+		result = left != right;
+		break;
 	}
 	return result;
 }
@@ -38,6 +53,9 @@ double evaluateArithmetic(double left, Operators operator_, double right)
 	{
 	case ADD:
 		result = left + right;
+		break;
+	case SUBTRACT:
+		result = left - right;
 		break;
 	case MULTIPLY:
 		result = left * right;

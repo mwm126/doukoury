@@ -7,6 +7,11 @@ typedef char *CharPtr;
 enum Operators
 {
     LESS,
+    GREATER,
+    ELESS,
+    EGREATER,
+    EQUAL,
+    NOTEQUAL,
     ADD,
     SUBTRACT,
     MULTIPLY,
